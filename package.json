@@ -16,13 +16,14 @@
     "ethers": "^6.11.1",
     "react-router-dom": "^6.22.3",
     "zustand": "^4.5.2",
-    "firebase": "^10.8.1",
     "react-toastify": "^10.0.4",
     "react-confetti": "^6.1.0",
     "framer-motion": "^11.1.5",
     "@react-three/fiber": "^8.15.19",
     "@react-three/drei": "^9.99.7",
-    "three": "^0.162.0"
+    "three": "^0.162.0",
+    "axios": "^1.6.7",
+    "@wagmi/core": "^2.6.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
