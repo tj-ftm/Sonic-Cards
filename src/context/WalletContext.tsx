@@ -38,12 +38,30 @@ const SONIC_NETWORK_PARAMS = {
   blockExplorerUrls: ['https://sonicscan.org'],
 };
 
+// Whitelisted tokens from shadow.so
+const WHITELISTED_TOKENS = [
+  {
+    address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
+    symbol: 'USDC',
+    decimals: 6,
+    logo: 'https://assets.coingecko.com/coins/images/6319/small/USD_Coin_icon.png'
+  },
+  {
+    address: '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619',
+    symbol: 'WETH',
+    decimals: 18,
+    logo: 'https://assets.coingecko.com/coins/images/2518/small/weth.png'
+  }
+];
+
 // Provider Component
 export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isConnected, setIsConnected] = useState(false);
   const [address, setAddress] = useState<string | null>(null);
   const [balance, setBalance] = useState('0');
   const [chainId, setChainId] = useState<number | null>(null);
+  const [tokenBalances, setTokenBalances] = useState<Record<string, string>>({});
+  const [nfts, setNfts] = useState([]);
 
   // Check if wallet is already connected
   useEffect(() => {
@@ -103,6 +121,34 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     try {
       const balance = await provider.getBalance(address);
       setBalance(ethers.formatEther(balance));
+      
+      // Update token balances
+      const tokenContract = new ethers.Contract(
+        WHITELISTED_TOKENS[0].address,
+        ['function balanceOf(address) view returns (uint256)'],
+        provider
+      );
+      
+      const balances = await Promise.all(
+        WHITELISTED_TOKENS.map(async (token) => {
+          try {
+            const balance = await tokenContract.balanceOf(address);
+            return [token.symbol, ethers.formatUnits(balance, token.decimals)];
+          } catch (error) {
+            console.error(`Error fetching ${token.symbol} balance:`, error);
+            return [token.symbol, '0'];
+          }
+        })
+      );
+      
+      setTokenBalances(Object.fromEntries(balances));
+      
+      // Fetch NFTs from PaintSwap
+      const nftResponse = await fetch(
+        `https://api.paintswap.io/v3/sonic/collections/${NFT_CONTRACT_ADDRESS}/nfts?owner=${address}`
+      );
+      const nftData = await nftResponse.json();
+      setNfts(nftData.nfts || []);
     } catch (error) {
       console.error('Failed to get balance:', error);
       setBalance('0');

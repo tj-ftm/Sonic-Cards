@@ -7,13 +7,13 @@ export default {
       colors: {
         // Dark mode colors
         'primary-dark': '#000000',
-        'secondary-dark': '#1a1a1a',
+        'secondary-dark': '#111111',
         'accent-dark': '#ff6b00',
         'text-dark': '#ffffff',
         
         // Light mode colors
         'primary-light': '#ffffff',
-        'secondary-light': '#f5f5f5',
+        'secondary-light': '#f8f8f8',
         'accent-light': '#ff6b00',
         'text-light': '#000000',
       },
@@ -21,8 +21,8 @@ export default {
         'pixel': ['"Press Start 2P"', 'cursive'],
       },
       backgroundImage: {
-        'gradient-dark': 'linear-gradient(to right, #000000, #1a1a1a)',
-        'gradient-light': 'linear-gradient(to right, #ffffff, #f5f5f5)',
+        'gradient-dark': 'linear-gradient(to right, #000000, #111111)',
+        'gradient-light': 'linear-gradient(to right, #ffffff, #f8f8f8)',
       },
     },
   },
